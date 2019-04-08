@@ -1,5 +1,0 @@
-import requests
-
-r = requests.form["user_name"]
-
-print(r)
