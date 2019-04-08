@@ -19,5 +19,7 @@ status VARCHAR(100) DEFAULT 'not started'
 
 create table user_has_task_table (
 fk_user_id INT(6) UNSIGNED,
-fk_task_id INT(6) UNSIGNED
+FOREIGN KEY (fk_user_id) REFERENCES user(user_id),
+fk_task_id INT(6) UNSIGNED,
+FOREIGN KEY (fk_task_id) REFERENCES task(task_id)
 );

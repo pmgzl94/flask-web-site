@@ -1,2 +1,3 @@
 INSERT INTO `pomme` (`id_pomme`, `name_pomme`) VALUES ('1', 'fromage');
 SELECT `id_pomme`, `name_pomme` FROM `pomme` WHERE 1
+INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES ('1', '2');
