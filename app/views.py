@@ -37,11 +37,11 @@ def register_page2():
     if models.check_already_exist(email) == 1 or password != password2:
         return redirect(url_for('register_page'))
     else:
-        print("success")
+        print("result : account created")
         models.add_new_user(email, password)
         session['username'] = email
         print(session['username'])
-        return redirect(url_for('route_all_users'))
+        return redirect(url_for('route_user'))
 
 @app.route('/signin', methods=['GET'])
 def log_page():
@@ -52,10 +52,10 @@ def log_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
     if models.check_log2(email, password) == 1:
-        return log_page
+        return redirect(url_for('log_page'))
     else:
         session['username'] = email
-        return redirect(url_for('route_all_users'))
+        return redirect(url_for('route_user'))
 
 @app.route('/signout', methods=['POST'])
 def signout():
@@ -65,10 +65,12 @@ def signout():
 
 @app.route('/user/<username>', methods=['POST'])
 def  route_user(username):
-     return render_template("index.html", title = "Hello"
+     return render_template("home.html", title = "Hello"
                             + username, myContent = "my super content for "
                             + username + "!")
 
+
+ 
 @app.route('/user')
 def route_all_users():
     result = ""
