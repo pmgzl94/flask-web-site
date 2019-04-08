@@ -75,7 +75,7 @@ def  route_user(username):
 def route_all_users():
     result = ""
     try:
-        cursor = config.connect.cursor ()
+        cursor = controller.connect.cursor ()
         cursor.execute("SELECT * from `user`")
         result = cursor.fetchall()
         cursor.close()

@@ -1,6 +1,6 @@
 from flask import jsonify
 
-import config
+from app import controller
 
 def add_task(title, begin, _end, _status):
     sql = "INSERT INTO `task` (`title`, `begin`, `end`, `status`) VALUES (?, ?, %s, %s)"
@@ -17,26 +17,26 @@ def add_task(title, begin, _end, _status):
     result = cursor.fetchall()
     task_id = result[0]
     cursor.execute(fk, (user_id, task_id))
-    config.connect.commit()
+    controller.connect.commit()
 
 def add_new_user(name, password):
-    cursor = config.connect.cursor()
+    cursor = controller.connect.cursor()
     sql = "INSERT INTO `user` (`user_id`, `username`, `password`) VALUES (NULL, %s, %s)"
     val = (name, password)
     cursor.execute(sql, val)
-    config.connect.commit()
+    controller.connect.commit()
 
 def remove_task(task_id):
-    mycursor = config.connect.cursor()
+    mycursor = controller.connect.cursor()
     sql = "DELETE FROM customers WHERE task_id=%s"
     fk = "DELETE FROM user_has_task_table WHERE fk_task_id=%s"
     mycursor.execute(fk, (task_id))
     mycursor.execute(sql, (task_id))
-    config.connect.commit()
+    controller.connect.commit()
 
 def check_log(email, password):
     status = 0
-    cursor = config.connection.cursor()
+    cursor = controller.connection.cursor()
     cursor.execute("SELECT user from password")
     datas = cursor.fetchall()
     for data in datas:
@@ -51,10 +51,10 @@ def check_log(email, password):
 
 def check_log2(email, password):
     status = 0
-    cursor = config.connection.cursor()
+    cursor = controller.connection.cursor()
     try:
         affect_count = cursor.execute("SELECT " + email + ", " + password + " FROM " + user)
-        config.connection.commit()
+        controller.connection.commit()
         logging.warn("%d", affected_count)
     except MySQLdb.IntegrityError:
         logging.warn("log failed")
@@ -67,11 +67,15 @@ def check_already_exist(name):
     status = 1
     result = ""
     try:
-         cursor = config.connect.cursor()
-         sql = "SELECT username FROM user WHERE username=%s"
-         cursor.execute(sql, name)
-         result = cursor.fetchall()
-         cursor.close()
+        cursor = controller.connect.cursor()
+        sql = "SELECT username FROM user WHERE username=%s"
+        cursor.execute(sql, name)
+        result = cursor.fetchall()
+        if result[0] == "()":
+            print("vide")
+        else:
+            print("full")
+        cursor.close()
     except Exception as e :
         status = 0
     print(result)
