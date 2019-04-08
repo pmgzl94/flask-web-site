@@ -19,27 +19,38 @@ def route_index():
     if 'username' in session:
         return render_template("home.html", title = "Home")
     else:
+        print("error : you must be logged in")
         return render_template("index.html", title = "Index")
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET'])
 def register_page():
+    return  render_template("register.html", title="REGISTER")
+
+@app.route('/register', methods=['POST'])
+def register_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
     password2 = request.form["user_password_confirm"]
-    if check_already_exist(name) == 1 and password == password2:
-        return render_template("register.html", title="REGISTER")
+    if models.check_already_exist(email) == 1 and password == password2:
+        return register_page()
     else:
-        Session['username'] = email
+        print("success")
+        models.add_new_user(email, password)
+        session['username'] = email
         return render_template("home.html", title="HOME")
 
-@app.route('/signin', methods=['POST'])
+@app.route('/signin', methods=['GET'])
 def log_page():
+    return render_template("log.html", title="LOG")
+
+@app.route('/signin', methods=['POST'])
+def log_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
     if check_log2(email, password) == 1:
-        return render_template("log.html", title="LOG")
+        return log_page
     else:
-        Session['username'] = email
+        session['username'] = email
         return render_template("home.html", title="HOME")
 
 @app.route('/signout', methods=['POST'])

@@ -19,6 +19,13 @@ def add_task(title, begin, _end, _status):
     cursor.execute(fk, (user_id, task_id))
     config.connect.commit()
 
+def add_new_user(name, password):
+    cursor = config.connect.cursor()
+    sql = "INSERT INTO `user` (`user_id`, `username`, `password`) VALUES (NULL, %s, %s)"
+    val = (name, password)
+    cursor.execute(sql, val)
+    config.connect.commit()
+
 def remove_task(task_id):
     mycursor = config.connect.cursor()
     sql = "DELETE FROM customers WHERE task_id=?"
@@ -57,13 +64,15 @@ def check_log2(email, password):
         return status
 
 def check_already_exist(name):
+    status = 1
     result = ""
     try:
-        cursor = config.connection.cursor()
-        cursor.execute("SELECT name from user")
-        result = cursor.fetchall()
-        cursor.close()
+         cursor = config.connect.cursor()
+         sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'epytodo' AND TABLE_NAME = '%s'"
+         cursor.execute(sql, name)
+         result = cursor.fetchall()
+         cursor.close()
     except Exception as e :
-        print("Already exist")
+        status = 0
     print(result)
-    return 1
+    return status
