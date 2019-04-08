@@ -41,7 +41,7 @@ def register_page2():
         models.add_new_user(email, password)
         session['username'] = email
         print(session['username'])
-        return redirect(url_for('route_user'))
+        return redirect(url_for('route_user', username=session['username']))
 
 @app.route('/signin', methods=['GET'])
 def log_page():
