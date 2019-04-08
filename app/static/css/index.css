@@ -1,0 +1,21 @@
+/* #mail { */
+/*     text-align:center; */
+/*     /\* margin-right: 300px; *\/ */
+/*     backgroud-color:powderblue; */
+/* } */
+
+/* .mail { */
+/*     margin-left: 300px; */
+/* } */
+
+/* #carform { */
+/*     margin-left: 300px; */
+/*     backgroud-color:powderblue; */
+/* } */
+
+input {
+    width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
