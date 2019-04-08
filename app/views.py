@@ -55,7 +55,7 @@ def log_page2():
         return redirect(url_for('log_page'))
     else:
         session['username'] = email
-        return redirect(url_for('route_user'))
+        return redirect(url_for('route_user', username=session['username']))
 
 @app.route('/signout', methods=['POST'])
 def signout():
@@ -63,12 +63,20 @@ def signout():
     session.pop('username', None)
     return redirect(url_for('route_index'))
 
-@app.route('/user/<username>', methods=['POST'])
+@app.route('/user/<username>')
 def  route_user(username):
      return render_template("home.html", title = "Hello"
                             + username, myContent = "my super content for "
                             + username + "!")
 
+@app.route('/user/task/id', methods = ['GET'])
+def task_fct():
+    return  render_template("register.html", title="TASK")
+
+# @app.route('/user/task/id', methods = ['POST'])
+# def task_fct():
+    
+#     return  render_template("register.html", title="TASK")
 
  
 @app.route('/user')

@@ -51,7 +51,7 @@ def check_log(email, password):
 
 def check_log2(email, password):
     status = 0
-    cursor = controller.connection.cursor()
+    cursor = controller.connect.cursor()
     try:
         affect_count = cursor.execute("SELECT " + email + ", " + password + " FROM " + user)
         controller.connection.commit()
