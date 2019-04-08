@@ -75,7 +75,7 @@ def task_fct():
     models.add_task(title, begin, end)
     return redirect(url_for('/user/<username>', username=session['username']))
 
-@app.route('/user/task', methods = ['POST'])
+@app.route('/user/task')
 def see_task():
     result = ""
     try:
