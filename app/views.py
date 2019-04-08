@@ -12,7 +12,7 @@ from flask import Flask, redirect, url_for
 
 import pymysql as sql
 
-import config
+from app import controller
 
 from app import models
 

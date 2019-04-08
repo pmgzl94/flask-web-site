@@ -3,8 +3,8 @@ from flask import jsonify
 import config
 
 def add_task(title, begin, _end, _status):
-    sql = "INSERT INTO `task` (`title`, `begin`, `end`, `status`) VALUES (?, ?, ?, ?)"
-    fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (?, ?)"
+    sql = "INSERT INTO `task` (`title`, `begin`, `end`, `status`) VALUES (?, ?, %s, %s)"
+    fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (%s, %s)"
     name = Session['username']
     cursor.execute("SELECT * FROM user")
     result = cursor.fetchall()
@@ -12,7 +12,7 @@ def add_task(title, begin, _end, _status):
         if name == row[1]:
             user_id = row[0]
     cursor.execute(sql, (title, begin, _end, _status))
-    get_task= "SELECT task_id FROM task where title=?"
+    get_task= "SELECT task_id FROM task WHERE title=%s"
     cursor.execute(get_task, (title))
     result = cursor.fetchall()
     task_id = result[0]
@@ -28,8 +28,8 @@ def add_new_user(name, password):
 
 def remove_task(task_id):
     mycursor = config.connect.cursor()
-    sql = "DELETE FROM customers WHERE task_id=?"
-    fk = "DELETE FROM user_has_task_table WHERE fk_task_id=?"
+    sql = "DELETE FROM customers WHERE task_id=%s"
+    fk = "DELETE FROM user_has_task_table WHERE fk_task_id=%s"
     mycursor.execute(fk, (task_id))
     mycursor.execute(sql, (task_id))
     config.connect.commit()
@@ -68,7 +68,7 @@ def check_already_exist(name):
     result = ""
     try:
          cursor = config.connect.cursor()
-         sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'epytodo' AND TABLE_NAME = '%s'"
+         sql = "SELECT username FROM user WHERE username=%s"
          cursor.execute(sql, name)
          result = cursor.fetchall()
          cursor.close()
