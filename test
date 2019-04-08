@@ -1,0 +1,2 @@
+INSERT INTO `pomme` (`id_pomme`, `name_pomme`) VALUES ('1', 'fromage');
+SELECT `id_pomme`, `name_pomme` FROM `pomme` WHERE 1
