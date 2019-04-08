@@ -34,14 +34,14 @@ def register_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
     password2 = request.form["user_password_confirm"]
-    if models.check_already_exist(email) == 1 and password == password2:
-        return register_page()
+    if models.check_already_exist(email) == 1 or password != password2:
+        return redirect(url_for('register_page'))
     else:
         print("success")
         models.add_new_user(email, password)
         session['username'] = email
         print(session['username'])
-        return render_template("home.html", title="HOME")
+        return redirect(url_for('route_all_users'))
 
 @app.route('/signin', methods=['GET'])
 def log_page():
@@ -51,11 +51,11 @@ def log_page():
 def log_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
-    if check_log2(email, password) == 1:
+    if models.check_log2(email, password) == 1:
         return log_page
     else:
         session['username'] = email
-        return render_template("home.html", title="HOME")
+        return redirect(url_for('route_all_users'))
 
 @app.route('/signout', methods=['POST'])
 def signout():
