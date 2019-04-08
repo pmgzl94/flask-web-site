@@ -63,22 +63,36 @@ def signout():
     session.pop('username', None)
     return redirect(url_for('route_index'))
 
+@app.route('/user/task/add', methods=['GET'])
+def add_task():
+    return  render_template("task.html", title="TASK")
+
+@app.route('/user/task/id', methods = ['POST'])
+def task_fct():
+    title = request.form["title"]
+    begin = request.form["begin"]
+    end = request.form["end"]
+    models.add_task(title, begin, end)
+    return redirect(url_for('/user/<username>', username=session['username']))
+
+@app.route('/user/task', methods = ['POST'])
+def see_task():
+    result = ""
+    try:
+        cursor = controller.connect.cursor()
+        cursor.execute("SELECT * from `task`")
+        result = cursor.fetchall()
+        cursor.close()
+    except Exception as e:
+        print (" Caught an exception : ", e)
+    return jsonify(result)
+
 @app.route('/user/<username>')
 def  route_user(username):
      return render_template("home.html", title = "Hello"
                             + username, myContent = "my super content for "
                             + username + "!")
 
-@app.route('/user/task/id', methods = ['GET'])
-def task_fct():
-    return  render_template("register.html", title="TASK")
-
-# @app.route('/user/task/id', methods = ['POST'])
-# def task_fct():
-    
-#     return  render_template("register.html", title="TASK")
-
- 
 @app.route('/user')
 def route_all_users():
     result = ""
