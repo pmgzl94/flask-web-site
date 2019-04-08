@@ -6,13 +6,13 @@ from flask import render_template
 
 from flask import request
 
-
+from flask import session
 
 import pymysql as sql
 
 import config
 
-import models
+from app import models
 
 @app.route('/', methods=['GET'])
 def route_index():

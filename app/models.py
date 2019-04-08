@@ -22,9 +22,9 @@ def check_log(email, password):
          if password == data:
              status = 1
     cursor.execute("SELECT user from email")
-    datas = curso.fetchall()
+    datas = cursor.fetchall()
     for data in datas:
-         if email == data and status == 1
+         if email == data and status == 1:
              return 0
     return 1
 
