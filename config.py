@@ -1,9 +1,5 @@
-import pymysql.cursors
-
-import pymysql as sql
-
-connect = sql.connect(host ='localhost',
-                      unix_socket ='/var/lib/mysql/mysql.sock',
-                      user ='root',
-                      passwd ='root',
-                      db ='epytodo')
+DATABASE_HOST = 'localhost'
+DATABASE_SOCK = '/var/lib/mysql/mysql.sock'
+DATABASE_NAME = 'root'
+DATABASE_USER = 'root'
+DATABASE_PASS = 'epytodo'
