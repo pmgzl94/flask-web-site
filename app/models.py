@@ -3,14 +3,28 @@ from flask import jsonify
 import config
 
 def add_task(title, begin, _end, _status):
-    sql = "INSERT INTO `users` (`title`, `begin`, `end`, `status`) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO `task` (`title`, `begin`, `end`, `status`) VALUES (?, ?, ?, ?)"
+    fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (?, ?)"
+    name = Session['username']
+    cursor.execute("SELECT * FROM user")
+    result = cursor.fetchall()
+    for row in result:
+        if name == row[1]:
+            user_id = row[0]
     cursor.execute(sql, (title, begin, _end, _status))
+    get_task= "SELECT task_id FROM task where title=?"
+    cursor.execute(get_task, (title))
+    result = cursor.fetchall()
+    task_id = result[0]
+    cursor.execute(fk, (user_id, task_id))
     config.connect.commit()
 
-def remove_task(address):
+def remove_task(task_id):
     mycursor = config.connect.cursor()
-    sql = "DELETE FROM customers WHERE address = address"
-    mycursor.execute(sql)
+    sql = "DELETE FROM customers WHERE task_id=?"
+    fk = "DELETE FROM user_has_task_table WHERE fk_task_id=?"
+    mycursor.execute(fk, (task_id))
+    mycursor.execute(sql, (task_id))
     config.connect.commit()
 
 def check_log(email, password):
@@ -45,10 +59,10 @@ def check_log2(email, password):
 def check_already_exist(name):
     result = ""
     try:
-         cursor = config.connection.cursor()
-         cursor.execute("SELECT name from user")
-         result = cursor.fetchall()
-         cursor.close()
+        cursor = config.connection.cursor()
+        cursor.execute("SELECT name from user")
+        result = cursor.fetchall()
+        cursor.close()
     except Exception as e :
         print("Already exist")
     print(result)
