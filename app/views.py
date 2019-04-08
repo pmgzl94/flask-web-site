@@ -8,6 +8,8 @@ from flask import request
 
 from flask import session
 
+from flask import Flask, redirect, url_for
+
 import pymysql as sql
 
 import config
@@ -17,6 +19,7 @@ from app import models
 @app.route('/', methods=['GET'])
 def route_index():
     if 'username' in session:
+        print(session['username'])
         return render_template("home.html", title = "Home")
     else:
         print("error : you must be logged in")
@@ -37,6 +40,7 @@ def register_page2():
         print("success")
         models.add_new_user(email, password)
         session['username'] = email
+        print(session['username'])
         return render_template("home.html", title="HOME")
 
 @app.route('/signin', methods=['GET'])
@@ -54,13 +58,10 @@ def log_page2():
         return render_template("home.html", title="HOME")
 
 @app.route('/signout', methods=['POST'])
-def register():
-    name = Session['username']
+def signout():
+    name = session['username']
     session.pop('username', None)
-    return render_template("index.html",
-                           title="Hello ouarld",
-                           myContent="My SUPER content !!")
-
+    return redirect(url_for('route_index'))
 
 @app.route('/user/<username>', methods=['POST'])
 def  route_user(username):
