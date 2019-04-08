@@ -2,8 +2,8 @@ from flask import jsonify
 
 from app import controller
 
-def add_task(title, begin, _end, _status):
-    sql = "INSERT INTO `task` (`title`, `begin`, `end`, `status`) VALUES (?, ?, %s, %s)"
+def add_task(title, begin, _end):
+    sql = "INSERT INTO `task` (`title`, `begin`, `end`) VALUES (%s, %s, %s)"
     fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (%s, %s)"
     name = Session['username']
     cursor.execute("SELECT * FROM user")
@@ -11,7 +11,7 @@ def add_task(title, begin, _end, _status):
     for row in result:
         if name == row[1]:
             user_id = row[0]
-    cursor.execute(sql, (title, begin, _end, _status))
+    cursor.execute(sql, (title, begin, _end))
     get_task= "SELECT task_id FROM task WHERE title=%s"
     cursor.execute(get_task, (title))
     result = cursor.fetchall()
