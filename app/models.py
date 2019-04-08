@@ -3,6 +3,7 @@ from flask import jsonify
 from app import controller
 
 def add_task(title, begin, _end):
+    cursor = controller.connect.cursor()
     sql = "INSERT INTO `task` (`title`, `begin`, `end`) VALUES (%s, %s, %s)"
     fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (%s, %s)"
     name = Session['username']
