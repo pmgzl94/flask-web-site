@@ -4,17 +4,21 @@
   <head >
     <title > {{ title }} </title>
   </head >
-    <form action="/models" method="post">
+    <form action="/user/<username>" method="post">
       <div>
         <label for="mail">E-mail:</label>
 	<input type="email" id="mail" name="user_mail">
       </div>
      <div>
        <label for="psw">Password:</label>
-       <textarea id="psswd" name="user_password"></textarea>
+	<input type="password" id="password" name="user_password">       
+     </div>
+     <div>
+       <label for="repeat_psw">Confirm Password:</label>
+       	<input type="password" id="pasword" name="user_password_confirm">
      </div>
      <div class="button">
-	<button type="submit">log</button>
+	<button type="submit">register</button>
      </div>
     </form>
 </html >

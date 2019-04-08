@@ -1,9 +1,13 @@
-
 <! DOCTYPE html >
 <link rel="stylesheet" href="static/css/index.css">
 <html lang ="en">
   <head >
     <title > {{ title }} </title>
   </head >
-  <a href ="/register">Register</a>
+  <form action="/signin" method="POST">
+    <button type="submit" name="your_name" >Signin</button>
+  </form>
+  <form action="/register" method="POST">
+    <button type="submit" name="your_name" >Register</button>
+  </form>
 </html >

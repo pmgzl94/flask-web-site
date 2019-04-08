@@ -16,28 +16,33 @@ def route_home():
                            title = "Home")
 
 @app.route('/register', methods=['POST'])
-def log_page():
-    return render_template("log.html",
-                           title="LOG")
+def register_page():
+    return render_template("register.html", title="REGISTER")
 
-@app.route('/models', methods=['POST'])
+@app.route('/signin', methods=['POST'])
+def log_page():
+    return render_template("log.html", title="LOG")
+
+@app.route('/signout', methods=['POST'])
 def register():
-    user_name = request.form["user_name"]
+    user_name = request.form["user_mail"]
     print(user_name)
     return render_template("index.html",
                     title="Hello ouarld",
                     myContent="My SUPER content !!")
 
-@app.route('/user/<username>', methods=['GET'])
+@app.route('/user/<username>', methods=['POST'])
 def  route_user(username):
-     return render_template("index.html", title = "Hello" + username, myContent = "my super content for " + username + "!")
+     return render_template("index.html", title = "Hello"
+                            + username, myContent = "my super content for "
+                            + username + "!")
 
 @app.route('/user')
 def route_all_users():
     result = ""
     try:
         cursor = config.connect.cursor ()
-        cursor.execute("SELECT * from `users`")
+        cursor.execute("SELECT * from `user`")
         result = cursor.fetchall()
         cursor.close()
     except Exception as e:
