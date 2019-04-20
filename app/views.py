@@ -67,13 +67,14 @@ def signout():
 def add_task():
     return  render_template("task.html", title="TASK")
 
-@app.route('/user/task/id', methods = ['POST'])
+@app.route('/user/task/add', methods=['POST'])
 def task_fct():
     title = request.form["title"]
     begin = request.form["begin"]
     end = request.form["end"]
     models.add_task(title, begin, end)
-    return redirect(url_for('/user/<username>', username=session['username']))
+    print(session['username'])
+    return redirect(url_for('route_user', username=session['username']))
 
 @app.route('/user/task')
 def see_task():

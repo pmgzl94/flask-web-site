@@ -1,22 +1,24 @@
+from flask import session
+
 from flask import jsonify
 
 from app import controller
 
-def add_task(title, begin, _end):
+def add_task(title, begin, end):
     cursor = controller.connect.cursor()
     sql = "INSERT INTO `task` (`title`, `begin`, `end`) VALUES (%s, %s, %s)"
     fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (%s, %s)"
-    name = Session['username']
+    name = session['username']
     cursor.execute("SELECT * FROM user")
     result = cursor.fetchall()
     for row in result:
         if name == row[1]:
             user_id = row[0]
-    cursor.execute(sql, (title, begin, _end))
+    cursor.execute(sql, (title, begin, end))
     get_task= "SELECT task_id FROM task WHERE title=%s"
     cursor.execute(get_task, (title))
-    result = cursor.fetchall()
-    task_id = result[0]
+    resulte = cursor.fetchall()
+    task_id = resulte[0]
     cursor.execute(fk, (user_id, task_id))
     controller.connect.commit()
 
