@@ -39,30 +39,17 @@ def remove_task(task_id):
 
 def check_log(email, password):
     status = 0
-    cursor = controller.connection.cursor()
-    cursor.execute("SELECT user from password")
-    datas = cursor.fetchall()
-    for data in datas:
-         if password == data:
-             status = 1
-    cursor.execute("SELECT user from email")
-    datas = cursor.fetchall()
-    for data in datas:
-         if email == data and status == 1:
-             return 0
-    return 1
-
-def check_log2(email, password):
-    status = 0
     cursor = controller.connect.cursor()
     try:
-        affect_count = cursor.execute("SELECT " + email + ", " + password + " FROM " + user)
-        controller.connection.commit()
-        logging.warn("%d", affected_count)
-    except MySQLdb.IntegrityError:
-        logging.warn("log failed")
-        status = 1
+        sql = "SELECT username from user where password=%s and username=%s"
+        val = (password, email)
+        status = cursor.execute(sql, val)
+        print(status)
+        if status == 0:
+            print(" error  login or password does not match ")
     finally:
+        result = cursor.fetchall()
+        controller.connect.commit()
         cursor.close()
         return status
 
