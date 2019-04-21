@@ -33,8 +33,7 @@ def register_page():
 def register_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
-    password2 = request.form["user_password_confirm"]
-    if models.check_already_exist(email) == 1 or password != password2:
+    if models.check_already_exist(email) == 1:
         return redirect(url_for('register_page'))
     else:
         print("result : account created")

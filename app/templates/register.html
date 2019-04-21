@@ -4,7 +4,8 @@
   <head >
     <title > {{ title }} </title>
   </head >
-    <form action="/register" method="post">
+  <script type="text/javascript" src="static/js/index.js"></script>
+    <form action="/register" method="post" name = "register_form" onsubmit = "return(validate());">
       <div>
         <label for="mail">E-mail:</label>
 	<input type="email" id="mail" name="user_mail">
