@@ -11,6 +11,7 @@ def add_task(title, begin, end):
     name = session['username']
     cursor.execute("SELECT * FROM user")
     result = cursor.fetchall()
+    # print("res = ", result)
     for row in result:
         if name == row[1]:
             user_id = row[0]

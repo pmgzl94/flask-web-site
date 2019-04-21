@@ -1,19 +1,15 @@
 from app import app
 
 from flask import jsonify
-
+from flask import json
 from flask import render_template
-
 from flask import request
-
 from flask import session
-
 from flask import Flask, redirect, url_for
 
 import pymysql as sql
 
 from app import controller
-
 from app import models
 
 @app.route('/', methods=['GET'])
@@ -81,8 +77,30 @@ def see_task():
     result = ""
     try:
         cursor = controller.connect.cursor()
-        cursor.execute("SELECT * from `task`")
-        result = cursor.fetchall()
+        name = session['username']
+        get_user_id = "SELECT user_id from `user` where username=%s"
+        cursor.execute(get_user_id, name)
+        user_id = cursor.fetchall()
+        # print("user_id = ", user_id)
+        get_task_id = "SELECT fk_task_id from `user_has_task_table` where fk_user_id=%s"
+        cursor.execute(get_task_id, user_id)
+        task_id = cursor.fetchall()
+        print("task_id = ", task_id)
+        # print("lol1")
+        get_task = "SELECT * from `task` where task_id=%s"
+        print("lol2")
+        for i in task_id:
+            # print("i = ", i)
+            name_task = i
+            print("name_task = ", i)
+            cursor.execute(get_task, name_task)
+            print("lol3")
+            result = cursor.fetchall()
+            # result += ''.join(cursor.fetchall())
+            # with open('result.json', 'w') as fp:
+            #     json.dump(result, fp)
+        print("lol4")
+        print(result)
         cursor.close()
     except Exception as e:
         print (" Caught an exception : ", e)
@@ -98,8 +116,10 @@ def  route_user(username):
 def route_all_users():
     result = ""
     try:
-        cursor = controller.connect.cursor ()
-        cursor.execute("SELECT * from `user`")
+        cursor = controller.connect.cursor()
+        name = session['username']
+        sql = "SELECT * from `user` where username=%s"
+        cursor.execute(sql, name)
         result = cursor.fetchall()
         cursor.close()
     except Exception as e:
