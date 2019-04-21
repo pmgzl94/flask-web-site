@@ -15,7 +15,6 @@ from app import models
 @app.route('/', methods=['GET'])
 def route_index():
     if 'username' in session:
-        print(session['username'])
         return render_template("home.html", title = "Home")
     else:
         print("error : you must be logged in")
@@ -23,14 +22,16 @@ def route_index():
 
 @app.route('/register', methods=['GET'])
 def register_page():
-    return  render_template("register.html", title="REGISTER")
+    if 'username' in session:
+        return redirect(url_for('route_index'))
+    else:
+        return  render_template("register.html", title="REGISTER")
 
 @app.route('/register', methods=['POST'])
 def register_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
-    password2 = request.form["user_password_confirm"]
-    if models.check_already_exist(email) == 1 or password != password2:
+    if models.check_already_exist(email) == 1:
         return redirect(url_for('register_page'))
     else:
         print("result : account created")
@@ -41,13 +42,16 @@ def register_page2():
 
 @app.route('/signin', methods=['GET'])
 def log_page():
-    return render_template("log.html", title="LOG")
+    if 'username' in session:
+        return redirect(url_for('route_index'))
+    else:
+        return render_template("log.html", title="LOG")
 
 @app.route('/signin', methods=['POST'])
 def log_page2():
     email = request.form["user_mail"]
     password = request.form["user_password"]
-    if models.check_log2(email, password) == 1:
+    if models.check_log(email, password) == 0:
         return redirect(url_for('log_page'))
     else:
         session['username'] = email
