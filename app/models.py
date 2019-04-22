@@ -4,6 +4,25 @@ from flask import jsonify
 
 from app import controller
 
+def check_task(title):
+    cursor = controller.connect.cursor()
+    sql = "SELECT title from task title=%s"
+    status = cursor.execute(sql, title)
+    cursor.close()
+    return status
+
+def get_user_info(username):
+     result = ""
+    try:
+        cursor = controller.connect.cursor()
+        sql = "SELECT * from `user` where username=%s"
+        cursor.execute(sql, username)
+	result = cursor.fetchall()
+        cursor.close()
+    except Exception as e:
+        print (" Caught an exception : ", e)
+    return jsonify(result)
+
 def add_task(title, begin, end):
     cursor = controller.connect.cursor()
     sql = "INSERT INTO `task` (`title`, `begin`, `end`) VALUES (%s, %s, %s)"
@@ -47,7 +66,7 @@ def check_log(email, password):
         status = cursor.execute(sql, val)
         print(status)
         if status == 0:
-            print(" error  login or password does not match ")
+            print(" error login or password does not match ")
     finally:
         result = cursor.fetchall()
         controller.connect.commit()

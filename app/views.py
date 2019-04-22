@@ -29,16 +29,7 @@ def register_page():
 
 @app.route('/register', methods=['POST'])
 def register_page2():
-    email = request.form["user_mail"]
-    password = request.form["user_password"]
-    if models.check_already_exist(email) == 1:
-        return redirect(url_for('register_page'))
-    else:
-        print("result : account created")
-        models.add_new_user(email, password)
-        session['username'] = email
-        print(session['username'])
-        return redirect(url_for('route_user', username=session['username']))
+    return controller.manag_register_page()
 
 @app.route('/signin', methods=['GET'])
 def log_page():
@@ -69,12 +60,7 @@ def add_task():
 
 @app.route('/user/task/add', methods=['POST'])
 def task_fct():
-    title = request.form["title"]
-    begin = request.form["begin"]
-    end = request.form["end"]
-    models.add_task(title, begin, end)
-    print(session['username'])
-    return redirect(url_for('route_user', username=session['username']))
+    return call_adding_task()
 
 @app.route('/user/task')
 def see_task():
@@ -117,15 +103,7 @@ def  route_user(username):
                             + username + "!")
 
 @app.route('/user')
-def route_all_users():
+def route_user_info():
     result = ""
-    try:
-        cursor = controller.connect.cursor()
-        name = session['username']
-        sql = "SELECT * from `user` where username=%s"
-        cursor.execute(sql, name)
-        result = cursor.fetchall()
-        cursor.close()
-    except Exception as e:
-        print (" Caught an exception : ", e)
-    return jsonify(result)
+    username = session['username']
+    models.get_user_info(username)
