@@ -1,8 +1,24 @@
 import pymysql.cursors
 
+from flask import session
+
+from flask import jsonify
+
+from flask import render_template
+
+from flask import request
+
+from flask import Flask
+
+from flask import redirect
+
+from flask import url_for
+
 import pymysql as sql
 
 import config as cf
+
+from app import models
 
 connect = sql.connect(host = cf.DATABASE_HOST,
                       unix_socket = cf.DATABASE_SOCK,
@@ -42,8 +58,26 @@ def sign_in_get():
 def sign_in_post():
     email = request.form["user_mail"]
     password = request.form["user_password"]
-    if check_log(email, password) == 0:
+    if models.check_log(email, password) == 0:
         return redirect(url_for('log_page_get'))
     else:
         session['username'] = email
         return redirect(url_for('route_user', username=session['username']))
+
+def signout_from_session():
+    name = session['username']
+    session.pop('username', None)
+    return redirect(url_for('route_index'))
+
+def manag_register_page():
+    if 'username' in session:
+        return redirect(url_for('route_index'))
+    else:
+        return render_template("register.html", title="REGISTER")
+
+def manag_index():
+     if 'username' in session:
+        return render_template("home.html", title = "Home")
+     else:
+         print("error : you must be logged in")
+         return render_template("index.html", title = "Index")
