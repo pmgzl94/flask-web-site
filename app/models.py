@@ -1,3 +1,5 @@
+import hashlib
+
 from flask import session
 
 from flask import jsonify
@@ -56,6 +58,9 @@ def add_task(title, begin, end):
 
 def add_new_user(name, password):
     cursor = controller.connect.cursor()
+    # str	= hashlib.sha256(password.encode())
+    # print("\n\n\n", str, "\n\n\n")
+    # print("\n\n\n", str.hexdigest(), "\n\n\n")
     sql = "INSERT INTO `user` (`user_id`, `username`, `password`) VALUES (NULL, %s, %s)"
     val = (name, password)
     cursor.execute(sql, val)
@@ -72,6 +77,9 @@ def remove_task(task_id):
 def check_log(email, password):
     status = 0
     cursor = controller.connect.cursor()
+    # str = hashlib.sha256(password.encode())
+    # print("\n\n\n", str, "\n\n\n")
+    # print("\n\n\n", str.hexdigest(), "\n\n\n")
     try:
         sql = "SELECT username from user where password=%s and username=%s"
         val = (password, email)

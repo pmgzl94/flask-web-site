@@ -1,3 +1,5 @@
+import hashlib
+
 import pymysql.cursors
 
 from flask import session
