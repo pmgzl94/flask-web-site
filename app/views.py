@@ -25,7 +25,7 @@ def register_page():
     if 'username' in session:
         return redirect(url_for('route_index'))
     else:
-        return  render_template("register.html", title="REGISTER")
+        return render_template("register.html", title="REGISTER")
 
 @app.route('/register', methods=['POST'])
 def register_page2():
@@ -33,14 +33,11 @@ def register_page2():
 
 @app.route('/signin', methods=['GET'])
 def log_page_get():
-    if 'username' in session:
-        return redirect(url_for('route_index'))
-    else:
-        return render_template("log.html", title="LOG")
+    return controller.sign_in_post()
 
 @app.route('/signin', methods=['POST'])
 def log_page_post():
-    return models.log_in()
+    return controller.sign_in_post()
 
 @app.route('/signout', methods=['POST'])
 def signout():

@@ -15,12 +15,12 @@ def call_adding_task():
     begin = request.form["begin"]
     end = request.form["end"]
     if models.check_task(title) == 1:
-	print("task already exist")
+        print("task already exist")
         return redirect(url_for('add_task'))
     else:
       models.add_task(title, begin, end)
       return redirect(url_for('route_user', username=session['username']))
-    
+
 def manag_register_page():
     email = request.form["user_mail"]
     password = request.form["user_password"]
@@ -31,4 +31,19 @@ def manag_register_page():
         models.add_new_user(email, password)
         session['username'] = email
         print(session['username'])
+        return redirect(url_for('route_user', username=session['username']))
+
+def sign_in_get():
+    if 'username' in session:
+        return redirect(url_for('route_index'))
+    else:
+        return render_template("log.html", title="LOG")
+
+def sign_in_post():
+    email = request.form["user_mail"]
+    password = request.form["user_password"]
+    if check_log(email, password) == 0:
+        return redirect(url_for('log_page_get'))
+    else:
+        session['username'] = email
         return redirect(url_for('route_user', username=session['username']))

@@ -17,7 +17,7 @@ def check_task(title):
 
 def get_user_info(username):
      result = ""
-    try:
+     try:
         cursor = controller.connect.cursor()
         sql = "SELECT * from `user` where username=%s"
         cursor.execute(sql, username)
@@ -114,13 +114,3 @@ def display_task():
     except Exception as e:
         print (" Caught an exception : ", e)
     return jsonify(result)
-
-def log_in():
-    email = request.form["user_mail"]
-    password = request.form["user_password"]
-    if check_log(email, password) == 0:
-        return redirect(url_for('log_page_get'))
-    else:
-        session['username'] = email
-        return redirect(url_for('route_user', username=session['username']))
-
