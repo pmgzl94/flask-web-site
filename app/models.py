@@ -1,6 +1,10 @@
 from flask import session
-
 from flask import jsonify
+from flask import render_template
+from flask import request
+from flask import Flask, redirect, url_for
+
+import pymysql as sql
 
 from app import controller
 
@@ -11,7 +15,6 @@ def add_task(title, begin, end):
     name = session['username']
     cursor.execute("SELECT * FROM user")
     result = cursor.fetchall()
-    # print("res = ", result)
     for row in result:
         if name == row[1]:
             user_id = row[0]
@@ -71,3 +74,34 @@ def check_already_exist(name):
         status = 0
     print(result)
     return status
+
+def display_task():
+    result = ""
+    try:
+        cursor = controller.connect.cursor()
+        name = session['username']
+        get_user_id = "SELECT user_id from `user` where username=%s"
+        cursor.execute(get_user_id, name)
+        user_id = cursor.fetchall()
+        get_task_id = "SELECT fk_task_id from `user_has_task_table` where fk_user_id=%s"
+        cursor.execute(get_task_id, user_id)
+        task_id = cursor.fetchall()
+        get_task = "SELECT * from `task` where task_id=%s"
+        for i in task_id:
+            name_task = i
+            cursor.execute(get_task, name_task)
+            result = cursor.fetchall()
+        cursor.close()
+    except Exception as e:
+        print (" Caught an exception : ", e)
+    return jsonify(result)
+
+def log_in():
+    email = request.form["user_mail"]
+    password = request.form["user_password"]
+    if check_log(email, password) == 0:
+        return redirect(url_for('log_page_get'))
+    else:
+        session['username'] = email
+        return redirect(url_for('route_user', username=session['username']))
+
