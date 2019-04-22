@@ -32,3 +32,15 @@ def manag_register_page():
         session['username'] = email
         print(session['username'])
         return redirect(url_for('route_user', username=session['username']))
+
+def signout_from_session():
+    name = session['username']
+    session.pop('username', None)
+    return redirect(url_for('route_index'))
+
+def manag_register_page():
+    if 'username' in session:
+	return redirect(url_for('route_index'))
+    else:
+        return  render_template("register.html", title="REGISTER")
+

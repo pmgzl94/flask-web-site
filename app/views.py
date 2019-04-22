@@ -1,31 +1,30 @@
 from app import app
 
 from flask import jsonify
+
 from flask import json
+
 from flask import render_template
+
 from flask import request
+
 from flask import session
+
 from flask import Flask, redirect, url_for
 
 import pymysql as sql
 
 from app import controller
+
 from app import models
 
 @app.route('/', methods=['GET'])
 def route_index():
-    if 'username' in session:
-        return render_template("home.html", title = "Home")
-    else:
-        print("error : you must be logged in")
-        return render_template("index.html", title = "Index")
+    return controller.manag_index()
 
 @app.route('/register', methods=['GET'])
 def register_page():
-    if 'username' in session:
-        return redirect(url_for('route_index'))
-    else:
-        return  render_template("register.html", title="REGISTER")
+    return controller.manag_register_page()
 
 @app.route('/register', methods=['POST'])
 def register_page2():
@@ -44,9 +43,7 @@ def log_page_post():
 
 @app.route('/signout', methods=['POST'])
 def signout():
-    name = session['username']
-    session.pop('username', None)
-    return redirect(url_for('route_index'))
+    return controller.signout_from_session()
 
 @app.route('/user/task/add', methods=['GET'])
 def add_task():
