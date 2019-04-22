@@ -34,6 +34,7 @@ def call_adding_task():
 def manag_register_page():
     email = request.form["user_mail"]
     password = request.form["user_password"]
+    print("salut")
     if models.check_already_exist(email) == 1:
         return redirect(url_for('register_page'))
     else:

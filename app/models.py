@@ -81,21 +81,11 @@ def check_log(email, password):
         return status
 
 def check_already_exist(name):
-    status = 1
     result = ""
-    try:
-        cursor = controller.connect.cursor()
-        sql = "SELECT username FROM user WHERE username=%s"
-        cursor.execute(sql, name)
-        result = cursor.fetchall()
-        if result[0] == "()":
-            print("vide")
-        else:
-            print("full")
-        cursor.close()
-    except Exception as e :
-        status = 0
-    print(result)
+    cursor = controller.connect.cursor()
+    sql = "SELECT username FROM user WHERE username=%s"
+    status = cursor.execute(sql, name)
+    print(status)
     return status
 
 def display_task():
