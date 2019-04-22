@@ -2,13 +2,9 @@ import pymysql.cursors
 
 from flask import session
 
-from flask import jsonify
-
 from flask import render_template
 
 from flask import request
-
-from flask import Flask
 
 from flask import redirect
 
@@ -81,3 +77,8 @@ def manag_index():
      else:
          print("error : you must be logged in")
          return render_template("index.html", title = "Index")
+
+def hello_user(username):
+    return render_template("home.html", title = "Hello"
+                            + username, myContent = "my super content for "
+                            + username + "!")

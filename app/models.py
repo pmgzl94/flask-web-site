@@ -2,16 +2,6 @@ from flask import session
 
 from flask import jsonify
 
-from flask import render_template
-
-from flask import request
-
-from flask import Flask
-
-from flask import redirect
-
-from flask import url_for
-
 import pymysql as sql
 
 from app import controller
@@ -23,8 +13,9 @@ def check_task(title):
     cursor.close()
     return status
 
-def get_user_info(username):
+def get_user_info():
     result = ""
+    username = session['username']
     try:
         cursor = controller.connect.cursor()
         sql = "SELECT * from `user` where username=%s"
@@ -97,7 +88,7 @@ def check_already_exist(name):
         else:
             print("full")
         cursor.close()
-    except Exception as e :
+    except Exception as e:
         status = 0
     print(result)
     return status
