@@ -51,7 +51,7 @@ def add_task():
 
 @app.route('/user/task/add', methods=['POST'])
 def task_fct():
-    return call_adding_task()
+    return controller.call_adding_task()
 
 @app.route('/user/task')
 def see_task():

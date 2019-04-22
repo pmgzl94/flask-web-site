@@ -1,7 +1,11 @@
 from flask import session
+
 from flask import jsonify
+
 from flask import render_template
+
 from flask import request
+
 from flask import Flask, redirect, url_for
 
 import pymysql as sql
@@ -10,18 +14,18 @@ from app import controller
 
 def check_task(title):
     cursor = controller.connect.cursor()
-    sql = "SELECT title from task title=%s"
+    sql = "SELECT title from task WHERE title=%s"
     status = cursor.execute(sql, title)
     cursor.close()
     return status
 
 def get_user_info(username):
-     result = ""
+    result = ""
     try:
         cursor = controller.connect.cursor()
         sql = "SELECT * from `user` where username=%s"
         cursor.execute(sql, username)
-	result = cursor.fetchall()
+        result = cursor.fetchall()
         cursor.close()
     except Exception as e:
         print (" Caught an exception : ", e)
@@ -123,4 +127,3 @@ def log_in():
     else:
         session['username'] = email
         return redirect(url_for('route_user', username=session['username']))
-
