@@ -1,3 +1,5 @@
+import hashlib
+
 from flask import session
 
 from flask import jsonify
@@ -6,7 +8,11 @@ from flask import render_template
 
 from flask import request
 
-from flask import Flask, redirect, url_for
+from flask import Flask
+
+from flask import redirect
+
+from flask import url_for
 
 import pymysql as sql
 
@@ -19,8 +25,9 @@ def check_task(title):
     cursor.close()
     return status
 
-def get_user_info(username):
+def get_user_info():
     result = ""
+    username = session['username']
     try:
         cursor = controller.connect.cursor()
         sql = "SELECT * from `user` where username=%s"
@@ -51,8 +58,9 @@ def add_task(title, begin, end):
 
 def add_new_user(name, password):
     cursor = controller.connect.cursor()
+    str	= hashlib.sha256(password.encode())
     sql = "INSERT INTO `user` (`user_id`, `username`, `password`) VALUES (NULL, %s, %s)"
-    val = (name, password)
+    val = (name, str.hexdigest())
     cursor.execute(sql, val)
     controller.connect.commit()
 
@@ -67,9 +75,10 @@ def remove_task(task_id):
 def check_log(email, password):
     status = 0
     cursor = controller.connect.cursor()
+    str = hashlib.sha256(password.encode())
     try:
         sql = "SELECT username from user where password=%s and username=%s"
-        val = (password, email)
+        val = (str.hexdigest(), email)
         status = cursor.execute(sql, val)
         print(status)
         if status == 0:
@@ -85,7 +94,6 @@ def check_already_exist(name):
     cursor = controller.connect.cursor()
     sql = "SELECT username FROM user WHERE username=%s"
     status = cursor.execute(sql, name)
-    print(status)
     return status
 
 def display_task():
@@ -108,12 +116,3 @@ def display_task():
     except Exception as e:
         print (" Caught an exception : ", e)
     return jsonify(result)
-
-def log_in():
-    email = request.form["user_mail"]
-    password = request.form["user_password"]
-    if check_log(email, password) == 0:
-        return redirect(url_for('log_page_get'))
-    else:
-        session['username'] = email
-        return redirect(url_for('route_user', username=session['username']))
