@@ -18,8 +18,16 @@ import pymysql as sql
 
 from app import controller
 
+import config as cf
+
+connect = sql.connect(host = cf.DATABASE_HOST,
+                      unix_socket = cf.DATABASE_SOCK,
+                      user = cf.DATABASE_NAME,
+                      passwd = cf.DATABASE_USER,
+                      db = cf.DATABASE_PASS)
+
 def check_task(title):
-    cursor = controller.connect.cursor()
+    cursor = connect.cursor()
     sql = "SELECT title from task WHERE title=%s"
     status = cursor.execute(sql, title)
     cursor.close()
@@ -29,7 +37,7 @@ def get_user_info():
     result = ""
     username = session['username']
     try:
-        cursor = controller.connect.cursor()
+        cursor = connect.cursor()
         sql = "SELECT * from `user` where username=%s"
         cursor.execute(sql, username)
         result = cursor.fetchall()
@@ -39,7 +47,7 @@ def get_user_info():
     return jsonify(result)
 
 def add_task(title, begin, end):
-    cursor = controller.connect.cursor()
+    cursor = connect.cursor()
     sql = "INSERT INTO `task` (`title`, `begin`, `end`) VALUES (%s, %s, %s)"
     fk = "INSERT INTO `user_has_task_table` (`fk_user_id`, `fk_task_id`) VALUES (%s, %s)"
     name = session['username']
@@ -54,27 +62,27 @@ def add_task(title, begin, end):
     resulte = cursor.fetchall()
     task_id = resulte[0]
     cursor.execute(fk, (user_id, task_id))
-    controller.connect.commit()
+    connect.commit()
 
 def add_new_user(name, password):
-    cursor = controller.connect.cursor()
+    cursor = connect.cursor()
     str	= hashlib.sha256(password.encode())
     sql = "INSERT INTO `user` (`user_id`, `username`, `password`) VALUES (NULL, %s, %s)"
     val = (name, str.hexdigest())
     cursor.execute(sql, val)
-    controller.connect.commit()
+    connect.commit()
 
 def remove_task(task_id):
-    mycursor = controller.connect.cursor()
+    mycursor = connect.cursor()
     sql = "DELETE FROM customers WHERE task_id=%s"
     fk = "DELETE FROM user_has_task_table WHERE fk_task_id=%s"
     mycursor.execute(fk, (task_id))
     mycursor.execute(sql, (task_id))
-    controller.connect.commit()
+    connect.commit()
 
 def check_log(email, password):
     status = 0
-    cursor = controller.connect.cursor()
+    cursor = connect.cursor()
     str = hashlib.sha256(password.encode())
     try:
         sql = "SELECT username from user where password=%s and username=%s"
@@ -84,13 +92,13 @@ def check_log(email, password):
             print(" error login or password does not match ")
     finally:
         result = cursor.fetchall()
-        controller.connect.commit()
+        connect.commit()
         cursor.close()
         return status
 
 def check_already_exist(name):
     result = ""
-    cursor = controller.connect.cursor()
+    cursor = connect.cursor()
     sql = "SELECT username FROM user WHERE username=%s"
     status = cursor.execute(sql, name)
     return status
@@ -98,7 +106,7 @@ def check_already_exist(name):
 def display_task():
     result = ""
     try:
-        cursor = controller.connect.cursor()
+        cursor = connect.cursor()
         name = session['username']
         get_user_id = "SELECT user_id from `user` where username=%s"
         cursor.execute(get_user_id, name)
