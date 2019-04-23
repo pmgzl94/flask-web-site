@@ -24,11 +24,11 @@ def route_index():
 
 @app.route('/register', methods=['GET'])
 def register_page():
-    return controller.manag_register_page()
+    return controller.manag_register_page_get()
 
 @app.route('/register', methods=['POST'])
 def register_page2():
-    return controller.manag_register_page()
+    return controller.manag_register_page_post()
 
 @app.route('/signin', methods=['GET'])
 def log_page_get():

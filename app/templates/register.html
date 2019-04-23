@@ -5,18 +5,18 @@
     <title > {{ title }} </title>
   </head >
   <script type="text/javascript" src="static/js/index.js"></script>
-    <form action="/register" method="post" name = "register_form" onsubmit = "return(validate());">
-      <div>
-        <label for="mail">E-mail:</label>
-	<input type="email" id="mail" name="user_mail">
-      </div>
+  <form name="register_form" action="/register" onsubmit="return validatepsswd()" method="post">
+     <div>
+      <label for="mail">E-mail:</label>
+      <input type="email" id="mail" name="user_mail">
+     </div>
      <div>
        <label for="psw">Password:</label>
 	<input type="password" id="password" name="user_password">       
      </div>
      <div>
        <label for="repeat_psw">Confirm Password:</label>
-       	<input type="password" id="pasword" name="user_password_confirm">
+       	<input type="password" id="password" name="user_password_confirm">
      </div>
      <div class="button">
        <button type="submit">register</button>
