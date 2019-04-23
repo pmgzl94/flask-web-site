@@ -42,7 +42,6 @@ def call_adding_task():
 def manag_register_page_post():
     email = request.form["user_mail"]
     password = request.form["user_password"]
-    print(password)
     if models.check_already_exist(email) == 1:
         print("email already exist")
         return redirect(url_for('register_page'))
@@ -50,7 +49,6 @@ def manag_register_page_post():
         print("result : account created")
         models.add_new_user(email, password)
         session['username'] = email
-        print(session['username'])
         return redirect(url_for('route_user', username=session['username']))
 
 def sign_in_get():

@@ -80,7 +80,6 @@ def check_log(email, password):
         sql = "SELECT username from user where password=%s and username=%s"
         val = (str.hexdigest(), email)
         status = cursor.execute(sql, val)
-        print(status)
         if status == 0:
             print(" error login or password does not match ")
     finally:
